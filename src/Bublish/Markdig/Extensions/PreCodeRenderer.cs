@@ -7,11 +7,14 @@ using System.Collections.Generic;
 
 namespace Bublish.Markdig.Renderers
 {
-    public class CodeBlockRenderer : HtmlObjectRenderer<CodeBlock>
+    public class PreCodeRenderer : HtmlObjectRenderer<CodeBlock>
     {
-        public CodeBlockRenderer()
+        private CodeBlockRenderer originalCodeBlockRenderer;
+        
+        public PreCodeRenderer(CodeBlockRenderer originalCodeBlockRenderer = null)
         {
-            BlocksAsDiv = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            this.originalCodeBlockRenderer = originalCodeBlockRenderer ?? new CodeBlockRenderer();
+            BlocksAsDiv = new HashSet<string>(StringComparer.OrdinalIgnoreCase);            
         }
 
         public bool OutputAttributesOnPre { get; set; }
