@@ -47,8 +47,8 @@ namespace Bublish.Tests.MarkdownExperiments
         public void CanCreateCodeBlocks()
         {
             var text =
-                @"```csharp
-                   public static void Main(string[] args) { }    
+                @"```csharpy
+                    public static void Main(string[] args) { }    
                 ```";
 
             var pipeline =
@@ -58,7 +58,8 @@ namespace Bublish.Tests.MarkdownExperiments
 
             var html = Markdown.ToHtml(text, pipeline);
 
-            Assert.Equal(@"<pre class=""brush: csharp; gutter: false; toolbar: false; "">\npublic static void Main(string[] args) { }\n</pre >\n", html);
+            Assert.Contains("<pre class=\"brush: csharpy; gutter: false; toolbar: false; \">", html);
+            Assert.Contains("public static void Main", html);
         }
     }
 }

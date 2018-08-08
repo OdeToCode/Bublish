@@ -14,67 +14,26 @@ namespace Bublish.Markdig.Renderers
         public PreCodeRenderer(CodeBlockRenderer originalCodeBlockRenderer = null)
         {
             this.originalCodeBlockRenderer = originalCodeBlockRenderer ?? new CodeBlockRenderer();
-            BlocksAsDiv = new HashSet<string>(StringComparer.OrdinalIgnoreCase);            
         }
 
         public bool OutputAttributesOnPre { get; set; }
 
-        public HashSet<string> BlocksAsDiv { get; }
-
         protected override void Write(HtmlRenderer renderer, CodeBlock obj)
         {
             renderer.EnsureLine();
-
+        
             var fencedCodeBlock = obj as FencedCodeBlock;
-            if (fencedCodeBlock?.Info != null && BlocksAsDiv.Contains(fencedCodeBlock.Info))
+            if (fencedCodeBlock?.Info != null)
             {
-                var infoPrefix = (obj.Parser as FencedCodeBlockParser)?.InfoPrefix ??
-                                 FencedCodeBlockParser.DefaultInfoPrefix;
-
-                if (renderer.EnableHtmlForBlock)
-                {
-                    renderer.Write("<div")
-                            .WriteAttributes(obj.TryGetAttributes(),
-                                cls => cls.StartsWith(infoPrefix) ? cls.Substring(infoPrefix.Length) : cls)
-                            .Write(">");
-                }
-
-                renderer.WriteLeafRawLines(obj, true, true, true);
-
-                if (renderer.EnableHtmlForBlock)
-                {
-                    renderer.WriteLine("</div>");
-                }
-
+                renderer.Write($"<pre class=\"brush: {fencedCodeBlock.Info}; gutter: false; toolbar: false; \">");
+                renderer.EnsureLine();
+                renderer.WriteLeafRawLines(obj, true, true);
+                renderer.WriteLine("</pre>");
             }
             else
             {
-                if (renderer.EnableHtmlForBlock)
-                {
-                    renderer.Write("<pre");
-
-                    if (OutputAttributesOnPre)
-                    {
-                        renderer.WriteAttributes(obj);
-                    }
-
-                    renderer.Write("><code");
-
-                    if (!OutputAttributesOnPre)
-                    {
-                        renderer.WriteAttributes(obj);
-                    }
-
-                    renderer.Write(">");
-                }
-
-                renderer.WriteLeafRawLines(obj, true, true);
-
-                if (renderer.EnableHtmlForBlock)
-                {
-                    renderer.WriteLine("</code></pre>");
-                }
-            }
+                originalCodeBlockRenderer.Write(renderer, obj);
+            }                
         }
     }
 }
