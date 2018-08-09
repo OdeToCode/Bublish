@@ -1,7 +1,8 @@
-﻿using McMaster.Extensions.CommandLineUtils;
+﻿using Bublish.Conversion;
+using Bublish.Files;
+using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace Bublish
 {
@@ -9,47 +10,24 @@ namespace Bublish
     {
         static void Main(string[] args)
         {
-            var services = new ServiceCollection();
-            var provider = services.BuildServiceProvider();
-            var console = new CommandLineApplication<Program>();
+            var provider = BuildServices();
+            var console = new CommandLineApplication<Shell>();
             console.Conventions
                     .UseDefaultConventions()
                     .UseConstructorInjection(provider);
 
-            CommandLineApplication.Execute<Program>(args);
-        }
-            
-        [Option(Description = "Folder name with markdown files, defaults to current folder", ShortName ="p")]
-        public string Path { get; protected set; } 
-
-        [Argument(0)]
-        [AllowedValues("convert")]
-        public string Action { get; set; }
-
-        public Program()
-        {
-
+            console.Execute(args);
         }
 
-        public void OnExecute()
+        public static ServiceProvider BuildServices()
         {
-            SetDefaults();
-            RunConvert();
-            
-        }
+            var services = new ServiceCollection();
 
-        public void RunConvert()
-        {
-            if(Action == "convert")
-            {
+            services.AddLogging(c => c.AddConsole());
+            services.AddSingleton<IFileSystem, FileSystem>();
+            services.AddSingleton<IMarkdownToHtml, MarkdownToHtml>();
 
-            }
-        }
-
-        public void SetDefaults()
-        {
-            Action = Action ?? "convert";
-            Path = Path ?? Directory.GetCurrentDirectory();
+            return services.BuildServiceProvider();
         }
     }
 }
