@@ -10,16 +10,17 @@ namespace Bublish
     {
         static void Main(string[] args)
         {
-            var provider = BuildServices();
-            var console = new CommandLineApplication<Shell>();
-            console.Conventions
+            var provider = ConfigureServices();
+
+            var app = new CommandLineApplication<Application>();
+            app.Conventions
                     .UseDefaultConventions()
                     .UseConstructorInjection(provider);
 
-            console.Execute(args);
+            app.Execute(args);
         }
 
-        public static ServiceProvider BuildServices()
+        public static ServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection();
 

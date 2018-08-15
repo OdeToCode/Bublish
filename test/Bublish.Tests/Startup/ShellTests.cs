@@ -9,8 +9,8 @@ namespace Bublish.Tests.Startup
         [Fact]
         public void WillSetDefaults()
         {
-            var shell = new Shell(
-                new TestLogger<Shell>(), 
+            var shell = new Application(
+                new TestLogger<Application>(), 
                 new TestConverter(),
                 new TestFileSystem());
 

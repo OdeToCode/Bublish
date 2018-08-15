@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -7,10 +8,12 @@ namespace Bublish.Files
     public class FileSystem : IFileSystem
     {
         private string folder;
+        private readonly ILogger<FileSystem> logger;
 
-        public FileSystem()
+        public FileSystem(ILogger<FileSystem> logger)
         {
             this.folder = Directory.GetCurrentDirectory();
+            this.logger = logger;
         } 
 
         public void SetFolder(string folder)
@@ -31,8 +34,10 @@ namespace Bublish.Files
         }
 
         public void WriteFile(string name, string content)
-        {
-            File.WriteAllText(Path.Combine(folder, name), content);
+        {           
+            var fullPath = Path.Combine(folder, name);
+            logger.LogInformation($"Writing to {fullPath}");
+            File.WriteAllText(fullPath, content);
         }
 
         public string ChangeExtension(string name, string newExtension)

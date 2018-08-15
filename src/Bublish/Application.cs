@@ -6,13 +6,13 @@ using System.IO;
 
 namespace Bublish
 {
-    public class Shell
+    public class Application
     {
-        private readonly ILogger<Shell> logger;
+        private readonly ILogger<Application> logger;
         private readonly IMarkdownToHtml converter;
         private readonly IFileSystem fileSystem;
 
-        public Shell(ILogger<Shell> logger, 
+        public Application(ILogger<Application> logger, 
                      IMarkdownToHtml converter, 
                      IFileSystem fileSystem)
         {
@@ -22,9 +22,10 @@ namespace Bublish
         }
 
         [Option(Description = "Folder name with markdown files, defaults to current folder", ShortName = "p")]
+        [DirectoryExists]
         public string Path { get; protected set; }
 
-        [Argument(0)]
+        [Argument(0, Description ="convert | publish | clean")]
         [AllowedValues("convert")]
         public string Action { get; set; }
      
