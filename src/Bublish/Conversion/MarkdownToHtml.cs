@@ -30,10 +30,10 @@ namespace Bublish.Conversion
             {
                 logger.LogInformation($"Converting {file}");
 
-                var markdown = fileSystem.ReadFile(file);
+                var markdown = fileSystem.ReadText(file);
                 var html = Markdown.ToHtml(markdown, pipeline);
                 var newName = fileSystem.ChangeExtension(file, ".html");
-                fileSystem.WriteFile(newName, html);
+                fileSystem.WriteText(newName, html);
             }
         }
     }

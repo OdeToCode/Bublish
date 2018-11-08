@@ -12,7 +12,8 @@ namespace Bublish.Tests.Startup
             var shell = new Application(
                 new TestLogger<Application>(), 
                 new TestConverter(),
-                new TestFileSystem());
+                new TestFileSystem(),
+                new TestBlogServer());
 
             shell.SetDefaults();
 

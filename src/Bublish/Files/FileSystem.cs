@@ -27,17 +27,30 @@ namespace Bublish.Files
             return files.ToList();
         }
 
-        public string ReadFile(string name)
+        public string ReadText(string name)
         {
-            var result = File.ReadAllText(Path.Combine(folder, name));
+            var fullPath = Path.Combine(folder, name);
+            var result = File.ReadAllText(fullPath);
             return result;        
         }
 
-        public void WriteFile(string name, string content)
+        public byte[] ReadBinary(string name)
+        {
+            var fullPath = Path.Combine(folder, name);
+            var result = File.ReadAllBytes(fullPath);
+            return result;
+        }
+
+        public void WriteText(string name, string content)
         {           
             var fullPath = Path.Combine(folder, name);
             logger.LogInformation($"Writing to {fullPath}");
             File.WriteAllText(fullPath, content);
+        }
+
+        public bool Exists(string name)
+        {
+            return File.Exists(Path.Combine(folder, name));
         }
 
         public string ChangeExtension(string name, string newExtension)

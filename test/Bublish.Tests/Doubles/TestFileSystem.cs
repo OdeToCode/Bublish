@@ -11,13 +11,23 @@ namespace Bublish.Tests.Doubles
         {
             return null;
         }
+        
+        public bool Exists(string name)
+        {
+            return true;
+        }
 
         public List<string> FindFiles(string searchPattern)
         {
             return new List<string>();
         }
+        
+        public byte[] ReadBinary(string name)
+        {
+            return new Byte[] { 0x00, 0x01 };
+        }
 
-        public string ReadFile(string name)
+        public string ReadText(string name)
         {
             return null;
         }
@@ -27,7 +37,7 @@ namespace Bublish.Tests.Doubles
             
         }
 
-        public void WriteFile(string name, string content)
+        public void WriteText(string name, string content)
         {
             
         }
