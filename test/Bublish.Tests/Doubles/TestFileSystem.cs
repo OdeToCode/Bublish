@@ -7,6 +7,13 @@ namespace Bublish.Tests.Doubles
 {
     class TestFileSystem : IFileSystem
     {
+        private string textContent;
+
+        public TestFileSystem(string textContent = null)
+        {
+            this.textContent = textContent;
+        }
+
         public string ChangeExtension(string name, string newExtension)
         {
             return null;
@@ -29,7 +36,7 @@ namespace Bublish.Tests.Doubles
 
         public string ReadText(string name)
         {
-            return null;
+            return textContent;
         }
 
         public void SetFolder(string name)
@@ -39,7 +46,7 @@ namespace Bublish.Tests.Doubles
 
         public void WriteText(string name, string content)
         {
-            
+            textContent = content;
         }
     }
 }

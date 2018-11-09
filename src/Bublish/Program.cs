@@ -1,6 +1,6 @@
 ﻿using Bublish.Blog;
-using Bublish.Conversion;
 using Bublish.Files;
+using Bublish.Markdig;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -27,8 +27,8 @@ namespace Bublish
 
             services.AddLogging(c => c.AddConsole());
             services.AddSingleton<IFileSystem, FileSystem>();
-            services.AddSingleton<IMarkdownToHtml, MarkdownToHtml>();
             services.AddSingleton<IBlogServer, BlogServer>();
+            services.AddSingleton<IPipelineFactory, PipelineFactory>();
             
             return services.BuildServiceProvider();
         }

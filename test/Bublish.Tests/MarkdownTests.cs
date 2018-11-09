@@ -1,13 +1,16 @@
-﻿using Bublish.Markdig.Extensions;
+﻿using System.IO;
+using System.Linq;
+using Bublish.Markdig;
+using Bublish.Markdig.Extensions;
 using Bublish.Markdig.Renderers;
+using Bublish.Tests.Doubles;
 using Markdig;
+using Markdig.Extensions.Yaml;
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
-using System.IO;
-using System.Linq;
 using Xunit;
 
-namespace Bublish.Tests.UsingMarkdown
+namespace Bublish.Tests
 {
     public class MarkdownTests
     {
@@ -27,7 +30,7 @@ namespace Bublish.Tests.UsingMarkdown
                                 .UsePreCode()
                                 .Build();
 
-            Assert.Single(pipeline.Extensions.OfType<PreCodeExtension>());                           
+            Assert.Single(pipeline.Extensions.OfType<PreCodeExtension>());
         }
 
         [Fact]
@@ -42,7 +45,24 @@ namespace Bublish.Tests.UsingMarkdown
             Assert.Empty(renderer.ObjectRenderers.OfType<CodeBlockRenderer>());
             Assert.Single(renderer.ObjectRenderers.OfType<PreCodeRenderer>());
         }
-           
+
+        [Fact]
+        public void IngnoresOpeningYaml()
+        {
+            var text =
+@"--- 
+key:value
+...
+now markdown";
+            var factory = new PipelineFactory(new TestFileSystem(), new TestBlogServer());
+            var pipeline = factory.Build();
+            var html = Markdown.ToHtml(text, pipeline);
+
+            Assert.Single(pipeline.Extensions.OfType<YamlFrontMatterExtension>());
+            Assert.DoesNotContain("key", html);
+            Assert.Contains("now markdown", html);
+        }
+
         [Fact]
         public void CanCreateCodeBlocks()
         {
@@ -63,3 +83,6 @@ namespace Bublish.Tests.UsingMarkdown
         }
     }
 }
+
+
+

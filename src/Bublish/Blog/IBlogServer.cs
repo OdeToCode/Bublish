@@ -9,6 +9,7 @@ namespace Bublish.Blog
     {
         void Initialize(string server, string username, string password);
         string UploadMedia(string localName, byte[] bits);
-        int AddPost();
+        BlogPostResponse AddPost(DateTime publishDate, string htmlContent, string title, string slug);
+        BlogPostResponse UpdatePost(int id, string htmlContent, string title);
     }
 }

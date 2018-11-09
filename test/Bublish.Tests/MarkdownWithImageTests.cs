@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Bublish.Markdig.Extensions;
+﻿using Bublish.Markdig.Extensions;
 using Bublish.Tests.Doubles;
 using Markdig;
 using Xunit;
 
-namespace Bublish.Tests.UsingMarkdown
+namespace Bublish.Tests
 {
     public class MarkdownWithImageTests
     {

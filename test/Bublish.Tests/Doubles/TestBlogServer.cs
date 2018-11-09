@@ -7,7 +7,8 @@ namespace Bublish.Tests.Doubles
     {
         public bool Initialized { get; set; }
 
-        public int AddPost()
+
+        public BlogPostResponse AddPost(DateTime publishDate, string htmlContent, string title, string slug)
         {
             throw new NotImplementedException();
         }
@@ -15,6 +16,11 @@ namespace Bublish.Tests.Doubles
         public void Initialize(string server, string username, string password)
         {
             Initialized = true;
+        }
+
+        public BlogPostResponse UpdatePost(int id, string htmlContent, string title)
+        {
+            throw new NotImplementedException();
         }
 
         public string UploadMedia(string localName, byte[] bits)
