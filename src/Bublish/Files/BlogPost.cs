@@ -6,9 +6,10 @@ namespace Bublish.Files
 {
     public class BlogPost
     {
-        private readonly string name;
-        private readonly IFileSystem fileSystem;
         private string content;
+        private readonly string name;
+        private readonly IFileSystem fileSystem;        
+        private readonly string[] metadataDelimeters = new string[] { "---", "..."  };
         private readonly IDictionary<string, string> metadata;
 
         public BlogPost(string name, IFileSystem fileSystem)
@@ -83,17 +84,33 @@ namespace Bublish.Files
         {
             using (var writer = new StringWriter())
             {
-                writer.WriteLine("---");
+                writer.WriteLine(metadataDelimeters[0]);
                 foreach (var kvp in metadata)
                 {
                     writer.WriteLine($"{kvp.Key}:{kvp.Value}");
                 }
-                writer.Write("...");
+                writer.Write(metadataDelimeters[0]);
 
-                writer.Write(content.Substring(content.IndexOf("...") + 3));
+                writer.Write(GetContentNoMetadata());
                 content = writer.ToString();
                 fileSystem.WriteText(name, content);
             }
+        }
+
+        public string GetContentNoMetadata()
+        {
+            var firstIndex = content.IndexOf(metadataDelimeters[0]);
+            if(firstIndex < 0)
+            {
+                firstIndex = content.IndexOf(metadataDelimeters[1]);
+            }
+
+            var secondIndex = content.IndexOf(metadataDelimeters[0], firstIndex + 3);
+            if(secondIndex < 0)
+            {
+                secondIndex = content.IndexOf(metadataDelimeters[1], firstIndex + 3);
+            }
+            return content.Substring(secondIndex + 3);
         }
 
         public string GetContent()
@@ -107,13 +124,13 @@ namespace Bublish.Files
             using (var reader = new StringReader(content))
             {
                 var firstLine = reader.ReadLine();
-                if (firstLine.StartsWith("---"))
+                if (firstLine.StartsWith(metadataDelimeters[0]) || firstLine.StartsWith(metadataDelimeters[1]))
                 {
                     var foundMetadataEnd = false;
                     while (!foundMetadataEnd)
                     {
                         var line = reader.ReadLine();
-                        if (line.StartsWith("..."))
+                        if (line.StartsWith(metadataDelimeters[0]) || line.StartsWith(metadataDelimeters[1]))
                         {
                             foundMetadataEnd = true;
                         }

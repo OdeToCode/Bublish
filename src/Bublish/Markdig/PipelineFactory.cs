@@ -22,7 +22,10 @@ namespace Bublish.Markdig
                            .UseYamlFrontMatter()
                            .UsePreCode()
                            .UseImageProcessing(fileSystem, blogServer)
-                           .UseGenericAttributes()           
+                           .UseGenericAttributes()     
+                           .UseEmphasisExtras()
+                           .UseFootnotes()
+                           .UseTaskLists()
                            .Build();
         }
     }

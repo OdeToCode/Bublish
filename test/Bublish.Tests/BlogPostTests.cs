@@ -25,7 +25,7 @@ namespace Bublish.Tests
             var content =
 @"---
 date: 11/15/2017 10:03am
-...
+---
 quack quack 
 ";
             var fs = new TestFileSystem(textContent: content);
@@ -88,7 +88,7 @@ quack quack
 
             var result = fs.ReadText("_");
             Assert.Contains("id:42", result);
-            Assert.EndsWith("...\r\nquack quack \r\n", result);
+            Assert.EndsWith("---\r\nquack quack \r\n", result);
         }
     }
 }

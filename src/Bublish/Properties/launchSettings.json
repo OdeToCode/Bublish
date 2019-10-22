@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Bublish": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\scott\\OneDrive\\Documents\\blogposts"
+    }
+  }
+}

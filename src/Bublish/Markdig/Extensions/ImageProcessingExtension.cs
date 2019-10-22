@@ -32,6 +32,9 @@ namespace Bublish.Markdig.Extensions
 
         private void Pipeline_DocumentProcessed(MarkdownDocument document)
         {
+
+            var damn = document.Descendants().ToArray();
+
             foreach(var node in document.Descendants()
                                         .OfType<LinkInline>()
                                         .Where(l => l.IsImage))
